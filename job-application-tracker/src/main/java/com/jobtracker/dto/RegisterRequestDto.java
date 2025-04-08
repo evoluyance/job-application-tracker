@@ -4,16 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class RegisterRequestDto {
 
-    @NotBlank(message = "First name is required")
-    @Pattern(regexp = "^[A-Z][a-z]{1,29}$", message = "First name must start with a capital letter and contain only letters")
+    @NotBlank(message = "Username is required")
+    @Pattern(regexp = "^[A-Z][a-z]{1,29}$", message = "Username must start with a capital letter and contain only letters")
     private String username;
 
     @NotBlank(message = "Email is required")

@@ -1,14 +1,19 @@
 package com.jobtracker.service.impl;
 
+import com.jobtracker.dto.JobRequestRequestDto;
+import com.jobtracker.dto.JobRequestResponseDto;
+import com.jobtracker.dto.JobRequestDtoTransformer;
 import com.jobtracker.model.JobRequest;
+import com.jobtracker.model.User;
 import com.jobtracker.repository.JobRequestRepository;
 import com.jobtracker.service.JobRequestService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -16,46 +21,53 @@ import java.util.List;
 public class JobRequestServiceImpl implements JobRequestService {
 
     private final JobRequestRepository jobRequestRepository;
+    private final JobRequestDtoTransformer transformer;
 
     @Override
-    public JobRequest create(JobRequest jobRequest) {
-        log.info("Creating new JobRequest for user: {}", jobRequest.getUser().getUserEmail());
-        return jobRequestRepository.save(jobRequest);
+    public JobRequestResponseDto create(JobRequestRequestDto requestDto, User user) {
+        JobRequest jobRequest = transformer.toEntity(requestDto, user);
+        JobRequest saved = jobRequestRepository.save(jobRequest);
+        return transformer.toDto(saved);
     }
 
     @Override
-    public JobRequest update(JobRequest jobRequest) {
-        log.info("Updating JobRequest with ID: {}", jobRequest.getId());
-        if (!jobRequestRepository.existsById(jobRequest.getId())) {
-            log.warn("JobRequest with ID {} not found for update", jobRequest.getId());
-            throw new EntityNotFoundException("JobRequest not found");
-        }
-        return jobRequestRepository.save(jobRequest);
+    @Transactional
+    public JobRequestResponseDto update(long id, JobRequestRequestDto dto, User user) {
+        JobRequest jobRequest = findEntityByIdAndUser(id, user);
+
+        jobRequest.setNameJob(dto.getJobName());
+        jobRequest.setCompanyName(dto.getCompanyName());
+        jobRequest.setCommentOfJob(dto.getCommentOfJob());
+        jobRequest.setUrlJob(dto.getUrlJob());
+        jobRequest.setUrlResume(dto.getUrlResume());
+        jobRequest.setDataJobRequest(dto.getDataJobRequest());
+        jobRequest.setStatusReview(dto.getStatusReview());
+
+        return transformer.toDto(jobRequestRepository.save(jobRequest));
     }
 
     @Override
-    public void delete(long id) {
-        log.info("Deleting JobRequest with ID: {}", id);
-        if (!jobRequestRepository.existsById(id)) {
-            log.warn("JobRequest with ID {} not found for deletion", id);
-            throw new EntityNotFoundException("JobRequest not found");
-        }
-        jobRequestRepository.deleteById(id);
+    public void delete(long id, User user) {
+        JobRequest jobRequest = findEntityByIdAndUser(id, user);
+        jobRequestRepository.delete(jobRequest);
     }
 
     @Override
-    public JobRequest findById(long id) {
-        log.debug("Searching JobRequest by ID: {}", id);
+    public JobRequestResponseDto findById(long id, User user) {
+        return transformer.toDto(findEntityByIdAndUser(id, user));
+    }
+
+    @Override
+    public List<JobRequestResponseDto> findAllByUser(User user) {
+        return jobRequestRepository.findByUserId(user.getId())
+                .stream()
+                .map(transformer::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private JobRequest findEntityByIdAndUser(long id, User user) {
         return jobRequestRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("JobRequest with ID {} not found", id);
-                    return new EntityNotFoundException("JobRequest not found");
-                });
-    }
-
-    @Override
-    public List<JobRequest> findAll() {
-        log.debug("Retrieving all JobRequests");
-        return jobRequestRepository.findAll();
+                .filter(req -> req.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> new RuntimeException("Job request not found or does not belong to the user"));
     }
 }

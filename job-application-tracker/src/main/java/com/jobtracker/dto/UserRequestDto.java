@@ -14,11 +14,7 @@ public class UserRequestDto {
 
     @NotBlank(message = "First name is required")
     @Pattern(regexp = "^[A-Z][a-z]{1,29}$", message = "First name must start with a capital letter and contain only letters")
-    private String firstName;
-
-    @NotBlank(message = "Last name is required")
-    @Pattern(regexp = "^[A-Z][a-z]{1,29}$", message = "Last name must start with a capital letter and contain only letters")
-    private String lastName;
+    private String username;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
