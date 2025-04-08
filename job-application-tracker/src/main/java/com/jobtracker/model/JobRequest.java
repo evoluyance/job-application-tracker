@@ -2,6 +2,7 @@ package com.jobtracker.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class JobRequest {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotBlank
+    @NotBlank(message = "Name Job cannot be empty")
     @Column(name= "name_job", nullable = false,length = 100)
     private String nameJob;
 
@@ -37,9 +38,11 @@ public class JobRequest {
     @Column(name = "url_resume", length = 500)
     private String urlResume;
 
+    @NotNull(message = "Data job request cannot be empty")
     @Column(name = "data_job_request")
     private LocalDateTime dataJobRequest;
 
+    @NotNull(message = "Status review is mandatory")
     @Enumerated(EnumType.STRING)
     @Column(name = "status_review", nullable = false)
     private StatusReview statusReview;
