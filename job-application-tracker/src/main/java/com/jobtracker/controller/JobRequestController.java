@@ -40,14 +40,14 @@ public class JobRequestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobRequestResponseDto> getJobRequestById(@PathVariable Long id,
+    public ResponseEntity<JobRequestResponseDto> getJobRequestById(@PathVariable("id") Long id,
                                                                    @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.getEntityByEmail(userDetails.getUsername());
         return ResponseEntity.ok(jobRequestService.findById(id, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id,
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id,
                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.getEntityByEmail(userDetails.getUsername());
         jobRequestService.delete(id, user);
@@ -55,7 +55,7 @@ public class JobRequestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<JobRequestResponseDto> updateJobRequest(@PathVariable Long id,
+    public ResponseEntity<JobRequestResponseDto> updateJobRequest(@PathVariable("id") Long id,
                                                                   @RequestBody @Valid JobRequestRequestDto requestDto,
                                                                   @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.getEntityByEmail(userDetails.getUsername());

@@ -1,0 +1,84 @@
+# ============================
+# === Java / Maven Ignore ===
+# ============================
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Eclipse / IntelliJ IDEA
+*.iml
+.idea/
+*.ipr
+*.iws
+*.log
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+*.out
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# ============================
+# === Environment Secrets ===
+# ============================
+
+# Don't commit real secrets!
+.env
+application-prod.properties
+
+# ============================
+# === PostgreSQL ===
+# ============================
+
+*.sql
+*.dump
+
+# ============================
+# === Test / Coverage ===
+# ============================
+
+*.class
+*.swp
+*.swo
+*.bak
+*.tmp
+*.old
+*.orig
+
+# JaCoCo coverage reports
+jacoco.exec
+target/site/jacoco/
+
+# Surefire reports
+target/surefire-reports/
+
+# ============================
+# === Other Misc Files ===
+# ============================
+
+# IntelliJ local run configs
+.idea/runConfigurations/
+
+# Node/npm (якщо буде фронтенд)
+node_modules/
+dist/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
