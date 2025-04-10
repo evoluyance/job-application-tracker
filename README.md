@@ -1,10 +1,11 @@
 # 📋 Job Tracker
 
-Job Tracker — це Spring Boot вебзастосунок, який дозволяє користувачам створювати, переглядати та керувати власними заявками на вакансії (Job Requests). Доступ до запитів захищено через JWT аутентифікацію. Кожен користувач бачить лише свої дані.
+**Job Tracker** is a Spring Boot web application that allows users to create, view, and manage their own job applications ("Job Requests").  
+Each user can only access their own data, protected via **JWT authentication**.
 
 ---
 
-## 🔧 Технології
+## 🔧 Technologies Used
 
 - Java 17+
 - Spring Boot
@@ -16,15 +17,19 @@ Job Tracker — це Spring Boot вебзастосунок, який дозво
 
 ---
 
-## 🚀 Основний функціонал
+## 🚀 Key Features
 
-- ✅ Реєстрація та логін користувачів
-- ✅ Захист ендпоінтів через JWT
-- ✅ CRUD-операції для Job Requests
-- ✅ DTO-шари, валідація, логування
-- ✅ Витяг секретів із змінних середовища
+✅ User registration and login  
+✅ Endpoint protection using JWT tokens  
+✅ Full CRUD operations for job applications  
+✅ DTO layers, request validation, and structured logging  
+✅ Secure configuration via environment variables
 
 ---
 
-## 📂 Структура проєкту
+## ⚙️ Environment Configuration
 
+To run the application locally, you need to create a `.env` file in the project root with the following variable:
+
+```env
+JWT_SECRET=your-secret-key-here
